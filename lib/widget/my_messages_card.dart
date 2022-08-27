@@ -14,7 +14,7 @@ class MyMessagesCard extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: MediaQuery.of(context).size.width - 45,
-          minHeight: MediaQuery.of(context).size.height - 560,
+          // minHeight: MediaQuery.of(context).size.height - 560,
           //maxHeight: MediaQuery.of(context).size.height - 5
         ),
         child: Card(
