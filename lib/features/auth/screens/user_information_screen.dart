@@ -1,19 +1,19 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/common/utils/utils.dart';
+import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 
-class UserInformationScreen extends StatefulWidget {
+class UserInformationScreen extends ConsumerStatefulWidget {
   static const routeName = "/user-information-screen";
   const UserInformationScreen({Key? key}) : super(key: key);
 
   @override
-  State<UserInformationScreen> createState() => _UserInformationScreenState();
+  ConsumerState<UserInformationScreen> createState() =>
+      _UserInformationScreenState();
 }
 
-class _UserInformationScreenState extends State<UserInformationScreen> {
+class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
   final TextEditingController nameController = TextEditingController();
   File? image;
 
@@ -25,6 +25,16 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
   void selectImage() async {
     image = await pickImagefromGallery(context);
     setState(() {});
+  }
+
+  void storeUserData() async {
+    String name = nameController.text.trim();
+
+    if (name.isNotEmpty) {
+      ref
+          .read(AuthControllerProvider)
+          .saveUserDataToFirebase(context, name, image);
+    }
   }
 
   @override
@@ -53,8 +63,10 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
             Positioned(
                 bottom: -10,
                 left: 80,
-                child:
-                    IconButton(icon: const Icon(Icons.add), onPressed: () {})),
+                child: IconButton(
+                    icon: const Icon(Icons.add),
+                    iconSize: 25,
+                    onPressed: selectImage)),
           ]),
           Row(
             children: [
@@ -66,7 +78,7 @@ class _UserInformationScreenState extends State<UserInformationScreen> {
                     decoration:
                         const InputDecoration(hintText: "Enter your name"),
                   )),
-              IconButton(icon: Icon(Icons.done), onPressed: selectImage),
+              IconButton(icon: Icon(Icons.done), onPressed: storeUserData),
             ],
           )
         ]),
