@@ -5,7 +5,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/common/utils/utils.dart';
 import 'package:whatsapp_clone/model/user_model.dart';
-import 'package:whatsapp_clone/screens/mobile_chatscreen.dart';
+import 'package:whatsapp_clone/features/chat/screen/mobile_chatscreen.dart';
 
 final selectContactRepositoryProvider = Provider(
     (ref) => SelectContactRepository(firestore: FirebaseFirestore.instance));
@@ -32,16 +32,20 @@ class SelectContactRepository {
   void selectContact(Contact selectedContact, BuildContext context) async {
     try {
       bool isFound = false;
-      var userCollection =
+      QuerySnapshot<Map<String, dynamic>> userCollection =
           await FirebaseFirestore.instance.collection("Users").get();
 
-      for (var document in userCollection.docs) {
-        var userData = UserModel.fromMap(document.data());
+      for (QueryDocumentSnapshot<Map<String, dynamic>> document
+          in userCollection.docs) {
+        UserModel userData = UserModel.fromMap(document.data());
         String selectedPhoneNum =
             selectedContact.phones[0].number.replaceAll(" ", "");
-        if (selectedPhoneNum == userData.PhoneNumber) {
+        if (selectedPhoneNum == userData.phoneNumber) {
           isFound = true;
-          Navigator.pushNamed(context, MobileChatScreen.routeName);
+          Navigator.pushNamed(context, MobileChatScreen.routeName, arguments: {
+            "name": userData.name,
+            "uid": userData.uid,
+          });
         }
       }
       if (!isFound) {

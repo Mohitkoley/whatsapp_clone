@@ -13,15 +13,16 @@ class ChatList extends StatelessWidget {
       itemCount: messages.length,
       controller: ScrollController(),
       itemBuilder: (context, index) {
-        if (messages[index]["isMe"] == true) {
+        final Map<String, dynamic> message = messages[index];
+        if (message["isMe"] == true) {
           //MyMessages
           return MyMessagesCard(
-              message: messages[index]['text'].toString(),
-              time: messages[index]['time'].toString());
+              message: message['text'].toString(),
+              time: message['time'].toString());
         }
         return SenderMessagesCard(
-            message: messages[index]['text'].toString(),
-            time: messages[index]['time'].toString());
+            message: message['text'].toString(),
+            time: message['time'].toString());
       },
     );
   }

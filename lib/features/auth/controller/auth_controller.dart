@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, non_constant_identifier_names
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -43,5 +43,9 @@ class AuthController {
   Future<UserModel?> getUserData() async {
     UserModel? user = await authRepository.getCurrentUserData();
     return user;
+  }
+
+  Stream<UserModel> userDataById(String userId) {
+    return authRepository.userData(userId);
   }
 }

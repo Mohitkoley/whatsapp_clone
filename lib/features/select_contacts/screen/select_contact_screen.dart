@@ -7,9 +7,9 @@ import 'package:whatsapp_clone/common/widgets/error.dart';
 import 'package:whatsapp_clone/features/select_contacts/controller/select_contact_controller.dart';
 import 'package:whatsapp_clone/widget/contacts_list.dart';
 
-class SelectContact extends ConsumerWidget {
+class SelectContactScreen extends ConsumerWidget {
   static const String routeName = "/select-contact";
-  const SelectContact({Key? key}) : super(key: key);
+  const SelectContactScreen({Key? key}) : super(key: key);
   void selectContact(
       BuildContext context, Contact selectedContact, WidgetRef ref) {
     ref
@@ -31,10 +31,10 @@ class SelectContact extends ConsumerWidget {
           ],
         ),
         body: ref.watch(getContactProvider).when(
-            data: (contactsLists) => ListView.builder(
+            data: (List<Contact> contactsLists) => ListView.builder(
                   itemCount: contactsLists.length,
                   itemBuilder: (context, index) {
-                    final contact = contactsLists[index];
+                    Contact contact = contactsLists[index];
                     return InkWell(
                       onTap: () => selectContact(context, contact, ref),
                       child: Padding(

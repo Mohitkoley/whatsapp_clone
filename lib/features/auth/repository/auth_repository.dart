@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -78,8 +80,8 @@ class AuthRepository {
         isOnline: true,
         profilePic: photoUrl,
         uid: uid,
-        PhoneNumber: auth.currentUser!.phoneNumber!,
-        groupId: [],
+        phoneNumber: auth.currentUser!.phoneNumber.toString(),
+        groupId: <String>[],
       );
       firestore.collection('Users').doc(uid).set(user.toMap());
 
@@ -100,5 +102,13 @@ class AuthRepository {
     }
 
     return user;
+  }
+
+  Stream<UserModel> userData(String userId) {
+    return firestore
+        .collection("Users")
+        .doc(userId)
+        .snapshots()
+        .map((event) => UserModel.fromMap(event.data()!));
   }
 }

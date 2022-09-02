@@ -3,7 +3,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:whatsapp_clone/colors.dart';
 import 'package:whatsapp_clone/info.dart';
-import 'package:whatsapp_clone/screens/mobile_chatscreen.dart';
+import 'package:whatsapp_clone/features/chat/screen/mobile_chatscreen.dart';
 
 class ContactsLists extends StatelessWidget {
   const ContactsLists({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class ContactsLists extends StatelessWidget {
           shrinkWrap: true,
           itemCount: info.length,
           itemBuilder: ((context, index) {
-            var infop = info[index];
+            Map<String, dynamic> infop = info[index];
             return Column(
               children: [
                 InkWell(
@@ -25,7 +25,8 @@ class ContactsLists extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => MobileChatScreen()));
+                            builder: (context) =>
+                                MobileChatScreen(name: "Mohit", uid: "2333")));
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
