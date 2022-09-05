@@ -1,10 +1,13 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:whatsapp_clone/common/enums/message_enum.dart';
+import 'package:whatsapp_clone/common/repositories/common_firebase_storage_repositories.dart';
 import 'package:whatsapp_clone/common/utils/utils.dart';
 import 'package:whatsapp_clone/model/chat_contact.dart';
 import 'package:whatsapp_clone/model/message_model.dart';
@@ -184,6 +187,67 @@ class ChatRepository {
       );
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  void sendFileMessage({
+    required BuildContext context,
+    required File file,
+    required String recieverUserId,
+    required UserModel senderUserData,
+    required ProviderRef ref,
+    required MessageEnum messageEnum,
+  }) async {
+    try {
+      DateTime timeSent = DateTime.now();
+      String messageId = const Uuid().v1();
+
+      String FileUrl = await ref
+          .read(commonFirebaseStorageRepositoryProvider)
+          .storeFileToFirebase(
+            "Chat/${messageEnum.type}/${senderUserData.uid}/$recieverUserId/$messageId",
+            file,
+          );
+      String contactMsg;
+      switch (messageEnum) {
+        case MessageEnum.text:
+          contactMsg = "Sent a text message";
+          break;
+        case MessageEnum.image:
+          contactMsg = "📷 Photo";
+          // TODO: Handle this case.
+          break;
+        case MessageEnum.audio:
+          contactMsg = "🎧 Audio";
+          // TODO: Handle this case.
+          break;
+        case MessageEnum.video:
+          contactMsg = "🎥 Video";
+          // TODO: Handle this case.
+          break;
+        case MessageEnum.gif:
+          contactMsg = "🎥 Gif";
+          // TODO: Handle this case.
+          break;
+      }
+
+      var userDataMap =
+          await firestore.collection("Users").doc(recieverUserId).get();
+      UserModel recieverUserData = UserModel.fromMap(userDataMap.data()!);
+
+      _saveDataToContactsSubcollection(senderUserData, recieverUserData,
+          contactMsg, timeSent, recieverUserId);
+
+      _saveMessageToMessageSubcollection(
+          recieverUserId: recieverUserId,
+          text: FileUrl,
+          timeSent: timeSent,
+          messageId: messageId,
+          recieverUsername: recieverUserData.name,
+          senderUsername: senderUserData.name,
+          messageType: messageEnum);
+    } catch (e) {
+      showSnackBar(context: context, content: e.toString());
     }
   }
 }

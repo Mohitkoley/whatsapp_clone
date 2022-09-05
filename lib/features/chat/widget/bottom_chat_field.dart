@@ -1,7 +1,10 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/colors.dart';
+import 'package:whatsapp_clone/common/enums/message_enum.dart';
 import 'package:whatsapp_clone/common/utils/utils.dart';
 import 'package:whatsapp_clone/features/chat/controller/chat_controller.dart';
 
@@ -23,6 +26,22 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   void dispose() {
     super.dispose();
     _messageController.dispose();
+  }
+
+  void sendFileMessage(
+    File file,
+    MessageEnum messageEnum,
+  ) async {
+    ref
+        .read(chatControllerProvider)
+        .sendFileMessage(context, file, widget.recieverUserId, messageEnum);
+  }
+
+  void selectImage() async {
+    File? image = await pickImagefromGallery(context);
+    if (image != null) {
+      sendFileMessage(image, MessageEnum.image);
+    }
   }
 
   void sendTextMessage() async {
@@ -111,7 +130,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
                                 Icons.camera_alt,
                                 color: Colors.grey,
                               ),
-                              onPressed: () {},
+                              onPressed: selectImage,
                             ),
                             IconButton(
                               icon: Icon(

@@ -1,11 +1,20 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import "package:flutter/material.dart";
+
 import 'package:whatsapp_clone/colors.dart';
+import 'package:whatsapp_clone/common/enums/message_enum.dart';
+import 'package:whatsapp_clone/features/chat/widget/display_text_image_gif.dart';
 
 class MyMessagesCard extends StatelessWidget {
   String message;
   String time;
-  MyMessagesCard({Key? key, required this.message, required this.time})
-      : super(key: key);
+  MessageEnum type;
+  MyMessagesCard({
+    Key? key,
+    required this.message,
+    required this.time,
+    required this.type,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +34,12 @@ class MyMessagesCard extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                padding:
-                    EdgeInsets.only(left: 10, right: 30, top: 5, bottom: 20),
-                child: Text(message),
+                padding: type == MessageEnum.text
+                    ? const EdgeInsets.only(
+                        left: 10, right: 30, top: 5, bottom: 20)
+                    : const EdgeInsets.only(
+                        left: 5, right: 5, top: 5, bottom: 25),
+                child: DisplayTextImageGif(message: message, type: type),
               ),
               Positioned(
                 bottom: 4,
