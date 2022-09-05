@@ -5,7 +5,7 @@ import 'package:whatsapp_clone/common/widgets/loader.dart';
 import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_clone/features/chat/widget/bottom_chat_field.dart';
 import 'package:whatsapp_clone/model/user_model.dart';
-import 'package:whatsapp_clone/widget/chat_list.dart';
+import 'package:whatsapp_clone/features/chat/widget/chat_list.dart';
 
 class MobileChatScreen extends ConsumerWidget {
   final String name;
@@ -40,12 +40,24 @@ class MobileChatScreen extends ConsumerWidget {
             IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
           ],
         ),
-        body: Column(children: [
-          const Expanded(child: ChatList()),
-          Padding(
-            padding: const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
-            child: BottomChatField(recieverUserId: uid),
-          ),
-        ]));
+        body: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                  fit: BoxFit.fill,
+                  image: AssetImage("assets/chatbackground.jpg"))),
+          child: Column(children: [
+            Expanded(
+                child: ChatList(
+              recieverUserId: uid,
+            )),
+            Padding(
+              padding:
+                  const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
+              child: BottomChatField(recieverUserId: uid),
+            ),
+          ]),
+        ));
   }
 }

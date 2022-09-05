@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import "package:flutter/material.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:whatsapp_clone/colors.dart';
+import 'package:whatsapp_clone/common/utils/utils.dart';
 import 'package:whatsapp_clone/features/chat/controller/chat_controller.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
@@ -26,6 +26,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   }
 
   void sendTextMessage() async {
+    debugPrint("sendTextMessage called");
     if (isShow) {
       ref.read(chatControllerProvider).sendTextMessage(
             context,
@@ -138,9 +139,9 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
           child: CircleAvatar(
             backgroundColor: const Color(0xFF128C73),
             radius: 25,
-            child: GestureDetector(
-              onTap: sendTextMessage,
-              child: Icon(
+            child: IconButton(
+              onPressed: sendTextMessage,
+              icon: Icon(
                 isShow ? Icons.send : Icons.mic,
                 color: Colors.white,
               ),

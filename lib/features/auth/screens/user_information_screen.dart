@@ -17,6 +17,7 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
   final TextEditingController nameController = TextEditingController();
   File? image;
 
+  @override
   void dispose() {
     super.dispose();
     nameController.dispose();

@@ -1,7 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -95,7 +94,7 @@ class AuthRepository {
 
   Future<UserModel?> getCurrentUserData() async {
     var userData =
-        await firestore.collection("users").doc(auth.currentUser?.uid).get();
+        await firestore.collection("Users").doc(auth.currentUser?.uid).get();
     UserModel? user;
     if (userData.data() != null) {
       user = UserModel.fromMap(userData.data()!);

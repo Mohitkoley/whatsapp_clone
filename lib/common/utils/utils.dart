@@ -13,6 +13,7 @@ showSnackBar({
           right: 20,
           left: 20),
       behavior: SnackBarBehavior.floating,
+      duration: const Duration(seconds: 1),
       backgroundColor: tabColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(24),
