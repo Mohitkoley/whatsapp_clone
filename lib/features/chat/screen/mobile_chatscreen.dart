@@ -40,24 +40,31 @@ class MobileChatScreen extends ConsumerWidget {
             IconButton(icon: Icon(Icons.more_vert), onPressed: () {}),
           ],
         ),
-        body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                  fit: BoxFit.fill,
-                  image: AssetImage("assets/chatbackground.jpg"))),
-          child: Column(children: [
-            Expanded(
-                child: ChatList(
-              recieverUserId: uid,
-            )),
-            Padding(
-              padding:
-                  const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
-              child: BottomChatField(recieverUserId: uid),
+        body: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                      fit: BoxFit.fill,
+                      image: AssetImage("assets/chatbackground.jpg"))),
             ),
-          ]),
+            Container(
+              color: Colors.transparent,
+              child: Column(children: [
+                Expanded(
+                    child: ChatList(
+                  recieverUserId: uid,
+                )),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
+                  child: BottomChatField(recieverUserId: uid),
+                ),
+              ]),
+            ),
+          ],
         ));
   }
 }

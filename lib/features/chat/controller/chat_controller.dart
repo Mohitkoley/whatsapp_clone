@@ -9,6 +9,7 @@ import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_clone/features/chat/repository/chat_repository.dart';
 import 'package:whatsapp_clone/model/chat_contact.dart';
 import 'package:whatsapp_clone/model/message_model.dart';
+import 'package:whatsapp_clone/model/user_model.dart';
 
 final chatControllerProvider = Provider((ref) {
   debugPrint("chatControllerProvider called");
@@ -62,7 +63,7 @@ class ChatController {
     String recieverUserId,
     MessageEnum messageEnum,
   ) {
-    debugPrint("sendTextMessage called");
+    debugPrint("sendFileMessage called");
     ref.read(userDataAuthProvider).when(
           data: (userData) {
             if (userData != null) {
@@ -82,5 +83,22 @@ class ChatController {
           error: (error, stackTrace) => showSnackBar(
               context: context, content: "error: $error, $stackTrace"),
         );
+  }
+
+  void sendGIFMessage(
+      BuildContext context, String gifUrl, String recieverUserId) {
+    int gifUrlPartIndex = gifUrl.lastIndexOf("-") + 1;
+
+    String gifUrlPart = gifUrl.substring(gifUrlPartIndex);
+    String newGifUrl = "https://i.giphy.com/media/$gifUrlPart/200.gif";
+    ref.read(userDataAuthProvider).whenData((value) {
+      if (value != null) {
+        chatRepository.sendGIFMessage(
+            context: context,
+            gifUrl: newGifUrl,
+            recieverUserId: recieverUserId,
+            senderUserData: value);
+      }
+    });
   }
 }

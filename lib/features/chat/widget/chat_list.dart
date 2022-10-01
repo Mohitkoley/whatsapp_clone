@@ -26,6 +26,7 @@ class ChatList extends ConsumerStatefulWidget {
 class _ChatListState extends ConsumerState<ChatList> {
   final messageController = ScrollController();
 
+  @override
   void dispose() {
     super.dispose();
     messageController.dispose();

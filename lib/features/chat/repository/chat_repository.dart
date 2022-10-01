@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 import 'package:whatsapp_clone/common/enums/message_enum.dart';
 import 'package:whatsapp_clone/common/repositories/common_firebase_storage_repositories.dart';
 import 'package:whatsapp_clone/common/utils/utils.dart';
+import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_clone/model/chat_contact.dart';
 import 'package:whatsapp_clone/model/message_model.dart';
 import 'package:whatsapp_clone/model/user_model.dart';
@@ -190,6 +191,39 @@ class ChatRepository {
     }
   }
 
+  void sendGIFMessage({
+    required BuildContext context,
+    required String gifUrl,
+    required String recieverUserId,
+    required UserModel senderUserData,
+  }) async {
+    //user -> sender id -> reciever id -> message -> message id -> store message
+    try {
+      DateTime timeSent = DateTime.now();
+      UserModel recieverUserData;
+      DocumentSnapshot<Map<String, dynamic>> userDataMap =
+          await firestore.collection("Users").doc(recieverUserId).get();
+
+      recieverUserData = UserModel.fromMap(userDataMap.data()!);
+
+      _saveDataToContactsSubcollection(
+          senderUserData, recieverUserData, "GIF", timeSent, recieverUserId);
+
+      var messageId = const Uuid().v1();
+
+      _saveMessageToMessageSubcollection(
+          recieverUserId: recieverUserId,
+          text: gifUrl,
+          timeSent: timeSent,
+          messageId: messageId,
+          recieverUsername: recieverUserData.name,
+          senderUsername: senderUserData.name,
+          messageType: MessageEnum.gif);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   void sendFileMessage({
     required BuildContext context,
     required File file,
@@ -202,7 +236,7 @@ class ChatRepository {
       DateTime timeSent = DateTime.now();
       String messageId = const Uuid().v1();
 
-      String FileUrl = await ref
+      String fileUrl = await ref
           .read(commonFirebaseStorageRepositoryProvider)
           .storeFileToFirebase(
             "Chat/${messageEnum.type}/${senderUserData.uid}/$recieverUserId/$messageId",
@@ -240,7 +274,7 @@ class ChatRepository {
 
       _saveMessageToMessageSubcollection(
           recieverUserId: recieverUserId,
-          text: FileUrl,
+          text: fileUrl,
           timeSent: timeSent,
           messageId: messageId,
           recieverUsername: recieverUserData.name,

@@ -64,5 +64,7 @@
 	<string>Camera Library Use</string>
 <key>NSMicrophoneUsageDescription</key>
 	<string>Mic Library Use</string>
+<key>NSAppleMusicUsageDescription</key>
+	<string>Apple Music Library Use</string>
 </dict>
 </plist>

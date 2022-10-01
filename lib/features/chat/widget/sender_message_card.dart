@@ -22,7 +22,7 @@ class SenderMessagesCard extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: ConstrainedBox(
         constraints: BoxConstraints(
-          minWidth: 100,
+          minWidth: MediaQuery.of(context).size.width - 60,
           maxWidth: MediaQuery.of(context).size.width - 45,
           // minHeight: MediaQuery.of(context).size.height - 560,
         ),
@@ -34,28 +34,29 @@ class SenderMessagesCard extends StatelessWidget {
           child: Stack(
             children: [
               Padding(
-                  child: DisplayTextImageGif(message: message, type: type),
-                  padding: type == MessageEnum.text
-                      ? const EdgeInsets.only(
-                          left: 10,
-                          right: 30,
-                          top: 5,
-                          bottom: 20,
-                        )
-                      : const EdgeInsets.only(
-                          left: 5,
-                          right: 5,
-                          top: 5,
-                          bottom: 25,
-                        )),
+                padding: type == MessageEnum.text
+                    ? const EdgeInsets.only(
+                        left: 10,
+                        right: 30,
+                        top: 5,
+                        bottom: 20,
+                      )
+                    : const EdgeInsets.only(
+                        left: 5,
+                        right: 5,
+                        top: 5,
+                        bottom: 25,
+                      ),
+                child: DisplayTextImageGif(message: message, type: type),
+              ),
               Positioned(
                 bottom: 2,
                 right: 10,
                 child: Row(children: [
                   Text(time,
-                      style: TextStyle(fontSize: 13, color: Colors.white60)),
+                      style: TextStyle(fontSize: 10, color: Colors.white60)),
                   const SizedBox(width: 5),
-                  const Icon(Icons.done_all, size: 20, color: Colors.white)
+                  const Icon(Icons.done_all, size: 15, color: Colors.white)
                 ]),
               )
             ],
