@@ -42,13 +42,15 @@ class MobileChatScreen extends ConsumerWidget {
         ),
         body: Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      colorFilter: ColorFilter.mode(
-                          Colors.black.withOpacity(0.3), BlendMode.dstATop),
-                      fit: BoxFit.fill,
-                      image: AssetImage("assets/chatbackground.jpg"))),
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(0.3), BlendMode.dstATop),
+                        fit: BoxFit.fill,
+                        image: const AssetImage("assets/chatbackground.jpg"))),
+              ),
             ),
             Container(
               color: Colors.transparent,

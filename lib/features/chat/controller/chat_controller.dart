@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_clone/common/enums/message_enum.dart';
+import 'package:whatsapp_clone/common/provider/message_reply_provider.dart';
 import 'package:whatsapp_clone/common/utils/utils.dart';
 import 'package:whatsapp_clone/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_clone/features/chat/repository/chat_repository.dart';
@@ -38,15 +39,18 @@ class ChatController {
     String text,
     String recieverUserId,
   ) {
+    final messageReply = ref.read(messageReplyProvider);
     debugPrint("sendTextMessage called");
     ref.read(userDataAuthProvider).when(
           data: (userData) {
             if (userData != null) {
               chatRepository.sendTextmessage(
-                  context: context,
-                  text: text,
-                  recieverUserId: recieverUserId,
-                  senderUserData: userData);
+                context: context,
+                text: text,
+                recieverUserId: recieverUserId,
+                senderUserData: userData,
+                messageReply: messageReply,
+              );
             } else {
               showSnackBar(context: context, content: "userData is null");
             }
@@ -64,6 +68,7 @@ class ChatController {
     MessageEnum messageEnum,
   ) {
     debugPrint("sendFileMessage called");
+    final messageReply = ref.read(messageReplyProvider);
     ref.read(userDataAuthProvider).when(
           data: (userData) {
             if (userData != null) {
@@ -74,6 +79,7 @@ class ChatController {
                 senderUserData: userData,
                 messageEnum: messageEnum,
                 ref: ref,
+                messageReply: messageReply,
               );
             } else {
               showSnackBar(context: context, content: "userData is null");
@@ -88,7 +94,7 @@ class ChatController {
   void sendGIFMessage(
       BuildContext context, String gifUrl, String recieverUserId) {
     int gifUrlPartIndex = gifUrl.lastIndexOf("-") + 1;
-
+    final messageReply = ref.read(messageReplyProvider);
     String gifUrlPart = gifUrl.substring(gifUrlPartIndex);
     String newGifUrl = "https://i.giphy.com/media/$gifUrlPart/200.gif";
     ref.read(userDataAuthProvider).whenData((value) {
@@ -97,8 +103,14 @@ class ChatController {
             context: context,
             gifUrl: newGifUrl,
             recieverUserId: recieverUserId,
-            senderUserData: value);
+            senderUserData: value,
+            messageReply: messageReply);
       }
     });
+  }
+
+  void setChatMessageSeen(
+      BuildContext context, String recieverUserId, String messageId) {
+    chatRepository.setChatMessageSeen(context, recieverUserId, messageId);
   }
 }
